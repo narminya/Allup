@@ -30,17 +30,22 @@ namespace Allup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options=>options.SerializerSettings.ReferenceLoopHandling 
+                = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(_conf.GetConnectionString("DefaultConnection"));
+              //  options.UseSqlServer(_conf.GetConnectionString("DefaultConnection"));
+                options.UseInMemoryDatabase(databaseName: "Allup");
+
             });
+
             FileConstants.ImagePath = Path.Combine(_env.WebRootPath,"assets", "images");
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -56,7 +61,7 @@ namespace Allup
             app.UseStaticFiles();
 
             app.UseRouting();
-            await app.Seed();
+             app.Seed();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

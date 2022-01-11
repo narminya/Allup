@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,7 +40,6 @@ namespace Allup.Areas.Admin.Controllers
 
             ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
 
-            var result = await _db.categories.Where(c => c.IsMain && !c.IsDeleted).ToListAsync();
 
 
             if (!ModelState.IsValid)
@@ -91,6 +91,138 @@ namespace Allup.Areas.Admin.Controllers
 
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int id )
+        {
+            var result = await _db.categories.Include(c => c.Children).FirstOrDefaultAsync(c => c.Id == id);
+            if (result==null)
+            {
+                return NotFound();
+            }
+
+            return View(result);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _db.categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return Json(category);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _db.categories.Include(c=>c.Children).FirstOrDefaultAsync(c => c.Id == id);
+            if (category.IsMain)
+            {
+                category.IsDeleted = true;
+
+                foreach (var item in category.Children)
+                {
+                    item.IsDeleted = true;
+                }
+            }
+            else
+            {
+                category.IsDeleted = true;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
+
+            if (!id.HasValue || id.Value < 1)
+            {
+                return BadRequest();
+            }
+            var result = await _db.categories.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+
+            CategoryCreateViewModel model = new CategoryCreateViewModel()
+            {
+                Name = result.Name
+            };
+
+           
+       
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Update")]
+        public async Task<IActionResult> UpdateCategory(int id, CategoryCreateViewModel model)
+        {
+                ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
+
+                var category = await _db.categories.Include(c => c.Children).FirstOrDefaultAsync(c => c.Id == id);
+
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.IsMain)
+            {
+                if (!model.File.ContentType.Contains("image"))
+                {
+                    ModelState.AddModelError(nameof(CategoryCreateViewModel.File), "File is not supported");
+
+                    return View();
+                }
+                if (model.File.Length > 1000 * 1024)
+                {
+                    ModelState.AddModelError(nameof(CategoryCreateViewModel.File), "File is not supported");
+                    return View();
+                }
+
+                string path = Path.Combine(FileConstants.ImagePath, category.Image);
+                FileUtil.FileDelete(path);
+                var image = FileUtil.FileCreate(model.File);
+
+
+             
+
+                category.Image = image;
+                category.Name = model.Name;
+
+                 _db.categories.Update(category);
+
+            }
+            else
+            {
+                var parent = await _db.categories.FirstOrDefaultAsync(c => c.IsMain && !c.IsDeleted && c.Id == model.ParentId);
+                if (parent == null)
+                {
+                    ModelState.AddModelError("ParentId", "Doesn`t exist");
+                    return View();
+                }
+                category.Name = model.Name;
+                category.Parent = parent;
+                _db.categories.Update(category);
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        
         }
     }
 }

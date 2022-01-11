@@ -11,7 +11,7 @@ namespace Allup.Models.DataAccessLayer
 {
     static public class AppDataSeed
     {
-        static async public Task<IApplicationBuilder> Seed(this IApplicationBuilder app)
+        static  public IApplicationBuilder Seed(this IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
@@ -19,19 +19,19 @@ namespace Allup.Models.DataAccessLayer
 
                // var role = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                db.Database.Migrate();
-                await InitCategories(db);
+              //  db.Database.Migrate();
+                 InitCategories(db);
 
 
             }
             return app;
         }
 
-        private async static Task InitCategories(AppDbContext db)
+        private static void InitCategories(AppDbContext db)
         {
             if (!db.categories.Any())
             {
-              await  db.categories.AddRangeAsync(
+                db.categories.AddRange(
                     new Category
                     {
                         Name = "Winter",
