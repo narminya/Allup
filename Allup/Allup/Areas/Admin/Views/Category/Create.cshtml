@@ -1,0 +1,67 @@
+﻿@model CategoryCreateViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Default form</h4>
+                <p class="card-description">
+                    Create Category
+                </p>
+                <form class="forms-sample" method="post" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label asp-for="Name">Name</label>
+                        <input class="form-control" asp-for="Name" id="exampleInputUsername1" placeholder="Name">
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IsMain" >Is it main category?</label>
+                        <input class="form-check" asp-for="IsMain"  id="IsMain" placeholder="Name">
+                    </div>
+                    <div class="form-group" id="fileInput">
+                        <label asp-for="File">Name</label>
+                        <input class="form-control" asp-for="File" accept="images/*" id="exampleInputUsername1" placeholder="Name">
+                        <span asp-validation-for="File"></span>
+                    </div>
+                    <div class="form-group" id="parent">
+                        <label asp-for="ParentId">Name</label>
+                        <select name="parents" class="form-control" asp-items=@ViewBag.Parents></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script {
+ @*   <partial name="_ValidatePartial" />*@
+
+    <script>
+
+        if ($("#IsMain").is(":checked")) {
+            $("#parent").hide();
+            $("#fileInput").show();
+        }
+        else {
+            $("#parent").show();
+            $("#fileInput").hide();
+        }
+
+        $(document).on("change", "#IsMain", function () {
+            if ($(this).is(":checked")) {
+                $("#parent").hide();
+                $("#fileInput").show();
+            }
+            else {
+                $("#parent").show();
+                $("#fileInput").hide();
+            }
+        })
+    </script>
+}
