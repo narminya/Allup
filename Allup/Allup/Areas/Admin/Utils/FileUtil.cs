@@ -12,8 +12,8 @@ namespace Allup.Areas.Admin.Utils
     {
         public static string FileCreate(IFormFile file)
         {
-
-            string path = Path.Combine(FileConstants.ImagePath,Guid.NewGuid() + file.FileName);
+            string fileName = Guid.NewGuid() + file.FileName;
+            string path = Path.Combine(FileConstants.ImagePath,fileName);
 
             FileStream fs = new FileStream(path, FileMode.Create);
 
@@ -22,7 +22,7 @@ namespace Allup.Areas.Admin.Utils
             fs.Close();
             fs.Dispose();
 
-            return file.FileName;
+            return fileName;
         }
 
         public static void FileDelete(string path)

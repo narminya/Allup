@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Narminya\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj": {}
+    "C:\\Users\\afsana.mammadova\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Narminya\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj": {
+    "C:\\Users\\afsana.mammadova\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Narminya\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj",
+        "projectUniqueName": "C:\\Users\\afsana.mammadova\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj",
         "projectName": "Allup",
-        "projectPath": "C:\\Users\\Narminya\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj",
-        "packagesPath": "C:\\Users\\Narminya\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Narminya\\Desktop\\Allup\\Allup\\Allup\\obj\\",
+        "projectPath": "C:\\Users\\afsana.mammadova\\Desktop\\Allup\\Allup\\Allup\\Allup.csproj",
+        "packagesPath": "C:\\Users\\afsana.mammadova\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\afsana.mammadova\\Desktop\\Allup\\Allup\\Allup\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Narminya\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\afsana.mammadova\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

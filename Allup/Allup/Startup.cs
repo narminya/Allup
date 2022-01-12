@@ -35,8 +35,8 @@ namespace Allup
                 = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<AppDbContext>(options =>
             {
-              //  options.UseSqlServer(_conf.GetConnectionString("DefaultConnection"));
-                options.UseInMemoryDatabase(databaseName: "Allup");
+                options.UseSqlServer(_conf.GetConnectionString("DefaultConnection"));
+              //  options.UseInMemoryDatabase(databaseName: "Allup");
 
             });
 

@@ -29,6 +29,7 @@ namespace Allup.Areas.Admin.Controllers
         }
 
         public IActionResult Create()
+        
         {
             ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
             return View();
@@ -39,8 +40,6 @@ namespace Allup.Areas.Admin.Controllers
         {
 
             ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
-
-
 
             if (!ModelState.IsValid)
             {
@@ -104,23 +103,11 @@ namespace Allup.Areas.Admin.Controllers
             return View(result);
         }
 
+    
+
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _db.categories.FirstOrDefaultAsync(c => c.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return Json(category);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("Delete")]
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            var category = await _db.categories.Include(c=>c.Children).FirstOrDefaultAsync(c => c.Id == id);
+            var category = await _db.categories.Include(c=>c.Children).FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
             if (category.IsMain)
             {
                 category.IsDeleted = true;
@@ -134,7 +121,10 @@ namespace Allup.Areas.Admin.Controllers
             {
                 category.IsDeleted = true;
             }
-            return RedirectToAction(nameof(Index));
+
+            await _db.SaveChangesAsync();
+            return Json(category);
+
         }
 
         public async Task<IActionResult> Update(int? id)
@@ -166,8 +156,7 @@ namespace Allup.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ActionName("Update")]
-        public async Task<IActionResult> UpdateCategory(int id, CategoryCreateViewModel model)
+        public async Task<IActionResult> Update(int id, CategoryCreateViewModel model)
         {
                 ViewBag.Parents = new SelectList(_db.categories.Where(i => i.IsMain));
 

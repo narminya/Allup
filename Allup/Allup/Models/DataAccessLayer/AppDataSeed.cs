@@ -19,7 +19,7 @@ namespace Allup.Models.DataAccessLayer
 
                // var role = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-              //  db.Database.Migrate();
+                db.Database.Migrate();
                  InitCategories(db);
 
 
@@ -35,19 +35,19 @@ namespace Allup.Models.DataAccessLayer
                     new Category
                     {
                         Name = "Winter",
-                        Image = "category-1.jpg",
+                        Image = "category-2.jpg",
                         IsMain = true
                     },
                      new Category
                      {
                          Name = "Winter",
-                         Image = "category-1.jpg",
+                         Image = "category-9.jpg",
                          IsMain = true
                      },
                       new Category
                       {
                           Name = "Winter",
-                          Image = "category-1.jpg",
+                          Image = "category-5.jpg",
                           IsMain = true
                       }
                     );
